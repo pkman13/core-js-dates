@@ -94,8 +94,9 @@ function getNextFriday(date) {
  * 1, 2024 => 31
  * 2, 2024 => 29
  */
-function getCountDaysInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountDaysInMonth(month, year) {
+  const date = new Date(year, month, 0);
+  return date.getDate();
 }
 
 /**
@@ -109,8 +110,11 @@ function getCountDaysInMonth(/* month, year */) {
  * '2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z'  => 2
  * '2024-02-01T00:00:00.000Z', '2024-02-12T00:00:00.000Z'  => 12
  */
-function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
-  throw new Error('Not implemented');
+function getCountDaysOnPeriod(dateStart, dateEnd) {
+  const dateStartObject = new Date(dateStart);
+  const dateEndObject = new Date(dateEnd);
+  const difference = dateEndObject - dateStartObject;
+  return difference / (1000 * 60 * 60 * 24) + 1;
 }
 
 /**
@@ -130,8 +134,12 @@ function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
  * '2024-02-02', { start: '2024-02-02', end: '2024-03-02' } => true
  * '2024-02-10', { start: '2024-02-02', end: '2024-03-02' } => true
  */
-function isDateInPeriod(/* date, period */) {
-  throw new Error('Not implemented');
+function isDateInPeriod(date, period) {
+  const dateObject = new Date(date);
+  const startDateObject = new Date(period.start);
+  const EndDateObject = new Date(period.end);
+
+  return dateObject >= startDateObject && dateObject <= EndDateObject;
 }
 
 /**
@@ -145,8 +153,20 @@ function isDateInPeriod(/* date, period */) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const dateObject = new Date(date);
+  const month = dateObject.getMonth() + 1;
+  const day = dateObject.getUTCDate();
+  const year = dateObject.getFullYear();
+  const hour = dateObject.getUTCHours();
+  const minute = dateObject.getUTCMinutes();
+  const seconds = dateObject.getUTCSeconds();
+  const hour12 = hour > 12 ? hour % 12 : hour;
+  const hourM = hour < 12 ? 'AM' : 'PM';
+  const minuteFormat = minute < 10 ? `0${minute}` : minute;
+  const secondsFormat = seconds < 10 ? `0${seconds}` : seconds;
+
+  return `${month}/${day}/${year}, ${hour12}:${minuteFormat}:${secondsFormat} ${hourM}`;
 }
 
 /**
